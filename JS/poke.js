@@ -624,12 +624,19 @@ favToggleBtn.addEventListener("click", function () {
     const categoria = (generoIngles ? generoIngles.genus : "").replace(/ Pokémon$/, "");
     const hab = p.abilities.map(function (a) { return a.ability.name.replace(/-/g, " "); }).join(", ");
 
-    const barras = p.stats.map(function (s) {
-      const n = Math.max(1, Math.floor(s.base_stat / 15));
-      let segmentos = "";
-      for (let i = 0; i < 15; i++) segmentos += `<i class="${i < n ? "on" : ""}"></i>`;
-      return `<div class="pk-col" title="${s.base_stat}"><div class="pk-seg">${segmentos}</div><span>${NOMES_STATS[s.stat.name] || s.stat.name}</span></div>`;
-    }).join("");
+    // estatísticas: uma barra horizontal por atributo, com número, cor pelo valor e total
+    let total = 0;
+    const barras = p.stats.map(function (s, i) {
+      const v = s.base_stat;
+      total += v;
+      const pct = Math.min(100, Math.round(v / 255 * 100)); // 255 = maior base stat possível
+      const nivel = v < 50 ? "baixo" : v < 90 ? "medio" : v < 120 ? "alto" : "topo";
+      return `<div class="pk-stat ${nivel}" style="--pct:${pct}%;--i:${i}">
+        <span class="pk-stat-nome">${NOMES_STATS[s.stat.name] || s.stat.name}</span>
+        <strong class="pk-stat-num">${v}</strong>
+        <div class="pk-trilho"><div class="pk-fill"></div></div>
+      </div>`;
+    }).join("") + `<div class="pk-stat-total"><span>Total</span><strong>${total}</strong></div>`;
 
     const botoesVersao = versoes.map(function (v, i) {
       return `<button class="pk-vbtn ${i ? "" : "ativo"}" style="--v:${coresVersao[i]}" data-i="${i}" title="${v.nome}"></button>`;
@@ -640,7 +647,7 @@ favToggleBtn.addEventListener("click", function () {
       <div class="pk-ficha">
         <div>
           <div class="pk-imagem"><img src="${arte(p.id)}" alt="${p.name}"></div>
-          <div class="pk-stats"><h3 class="pk-stats-t">Estatísticas</h3><div class="pk-colunas">${barras}</div></div>
+          <div class="pk-stats"><h3 class="pk-stats-t">Estatísticas</h3><div class="pk-barras">${barras}</div></div>
         </div>
         <div>
           <p class="pk-desc" id="pk-desc">${versoes[0] ? versoes[0].txt : ""}</p>
