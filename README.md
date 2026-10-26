@@ -8,6 +8,7 @@ Projeto de faculdade (ADS – Uniguaçu) feito em HTML, CSS e JavaScript puro.
 HTML/poke.html   página principal (abrir esta)
 CSS/poke.css     estilos
 JS/poke.js       lógica: lista, busca, ficha com animação, conta e favoritos
+index.html       redireciona para HTML/poke.html (necessário para o GitHub Pages)
 docs/            swagger da API do professor
 ```
 
