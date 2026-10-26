@@ -46,6 +46,9 @@ const signupFields = document.getElementById("signup-fields");
 const usernameInput = document.getElementById("username-input");
 const loginBtn = document.getElementById("login-btn");
 const signupBtn = document.getElementById("signup-btn");
+const openSignupBtn = document.getElementById("open-signup-btn");
+const cancelSignupBtn = document.getElementById("cancel-signup-btn");
+const signupUsernameInput = document.getElementById("signup-username");
 const logoutBtn = document.getElementById("logout-btn");
 const greetingText = document.getElementById("greeting-text");
 const accountMsg = document.getElementById("account-msg");
@@ -254,16 +257,18 @@ function apagarPessoaSalva() {
 }
 
 // ---- chamadas da API ----
-function mostrarMensagemConta(texto) {
+function mostrarMensagemConta(texto, ok) {
   accountMsg.textContent = texto;
   accountMsg.classList.toggle("show", Boolean(texto));
+  accountMsg.classList.toggle("ok", Boolean(ok));
 }
 
 async function apiGuidPorUsername(username) {
   const res = await fetch(apiBase + "/GuidByUsername?Username=" + encodeURIComponent(username));
   if (!res.ok) return null;
   const texto = (await res.text()).trim().replace(/^"|"$/g, "");
-  return texto || null;
+  if (!texto || /^0{8}-0{4}-0{4}-0{4}-0{12}$/.test(texto)) return null; // vazio ou guid "nulo" = usuário não existe
+  return texto;
 }
 
 async function apiCriarPessoa(dados) {
@@ -319,6 +324,21 @@ function mostrarContaDeslogada() {
   usernameInput.value = "";
 }
 
+// abre o formulário de cadastro (botão "Criar conta" ou login com usuário inexistente)
+function abrirCadastro(usernameSugerido) {
+  accountLoggedOut.style.display = "none";
+  signupFields.classList.add("show");
+  signupUsernameInput.value = usernameSugerido || "";
+  (signupUsernameInput.value ? document.getElementById("signup-name") : signupUsernameInput).focus();
+}
+
+function fecharCadastro() {
+  signupFields.classList.remove("show");
+  accountLoggedOut.style.display = "flex";
+  mostrarMensagemConta("");
+  usernameInput.focus();
+}
+
 async function tentarLoginAutomatico() {
   const salvo = lerPessoaSalva();
   if (!salvo || !salvo.guid) return;
@@ -351,7 +371,7 @@ async function entrar() {
       mostrarContaLogada(pessoa.name);
       await carregarFavoritosDoServidor();
     } else {
-      signupFields.classList.add("show");
+      abrirCadastro(username);
       mostrarMensagemConta("Usuário não encontrado. Preencha os dados para criar a conta.");
     }
   } catch (e) {
@@ -363,30 +383,45 @@ async function entrar() {
 }
 
 async function criarConta() {
-  const username = usernameInput.value.trim();
+  const username = signupUsernameInput.value.trim();
   const nome = document.getElementById("signup-name").value.trim();
   const sobrenome = document.getElementById("signup-surname").value.trim();
-  const nascimento = document.getElementById("signup-birthday").value;
+  const nascimento = document.getElementById("signup-birthday").value; // YYYY-MM-DD
 
-  if (!username || !nome || !nascimento) {
-    mostrarMensagemConta("Preencha usuário, nome e data de nascimento.");
+  if (!username || !nome || !sobrenome || !nascimento) {
+    mostrarMensagemConta("Preencha usuário, nome, sobrenome e data de nascimento.");
+    return;
+  }
+  if (nascimento > new Date().toISOString().slice(0, 10)) {
+    mostrarMensagemConta("A data de nascimento não pode estar no futuro.");
     return;
   }
 
+  mostrarMensagemConta("");
   signupBtn.disabled = true;
   signupBtn.textContent = "Criando...";
 
   try {
+    // evita duplicar: se o usuário já existe, só entra nele
+    if (await apiGuidPorUsername(username)) {
+      mostrarMensagemConta("Esse usuário já existe. Escolha outro ou volte e entre com ele.");
+      return;
+    }
+
     const guid = await apiCriarPessoa({ nome: nome, sobrenome: sobrenome, username: username, nascimento: nascimento });
+    if (!guid) throw new Error("A API não devolveu o id da conta");
+
     pessoa = { guid: guid, username: username, name: nome };
     salvarPessoa(pessoa);
     mostrarContaLogada(nome);
-    mostrarMensagemConta("");
+    mostrarMensagemConta("Conta criada! Bem-vindo, " + nome + ".", true);
     favoritosIds = [];
     atualizarContadorFavoritos();
     atualizarBotoesFavorito();
+    ["signup-name", "signup-surname", "signup-birthday"].forEach(function (id) { document.getElementById(id).value = ""; });
+    signupUsernameInput.value = "";
   } catch (e) {
-    mostrarMensagemConta("Não foi possível criar a conta. Tente novamente.");
+    mostrarMensagemConta("Não foi possível criar a conta. Verifique a conexão/CORS e tente novamente.");
   } finally {
     signupBtn.disabled = false;
     signupBtn.textContent = "Criar conta";
@@ -407,6 +442,14 @@ function sair() {
 
 loginBtn.addEventListener("click", entrar);
 signupBtn.addEventListener("click", criarConta);
+openSignupBtn.addEventListener("click", function () {
+  mostrarMensagemConta("");
+  abrirCadastro(usernameInput.value.trim());
+});
+cancelSignupBtn.addEventListener("click", fecharCadastro);
+signupFields.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") criarConta();
+});
 logoutBtn.addEventListener("click", sair);
 usernameInput.addEventListener("keydown", function (e) {
   if (e.key === "Enter") entrar();

@@ -30,3 +30,15 @@ Endpoints usados: `GET /GuidByUsername`, `POST /Person`, `GET /PersonByGuid`,
 
 No navegador só ficam guardados `guid`, `username` e `name` (localStorage, chave `pokedex-guri-person`).
 Os dados pessoais em si ficam no servidor do professor; este repositório contém apenas o código.
+
+## Fonte Pixelify Sans
+
+O CSS usa `../fonts/PixelifySans-Regular.ttf`. Baixe a fonte em
+<https://fonts.google.com/specimen/Pixelify+Sans> e coloque em `fonts/PixelifySans-Regular.ttf`.
+Sem o arquivo o site funciona normalmente com a fonte padrão (Segoe UI/Arial).
+
+## Cadastro
+
+Botão **Criar conta** na barra de conta (ou tentar entrar com um usuário que não existe) abre o formulário:
+usuário, nome, sobrenome e data de nascimento. Antes de criar, o site confere se o usuário já existe
+(`GET /GuidByUsername`) e só então faz `POST /Person`.
