@@ -1,0 +1,447 @@
+:root {
+  --bg: #14161a;
+  --card-bg: #1e2126;
+  --card-border: #2c3038;
+  --text: #f2f2f2;
+  --text-dim: #9a9fa8;
+  --accent: #ffcb05;
+  --error: #ff6b6b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(119, 0, 255, 0.03) 0px,
+      rgba(255, 255, 255, 0.03) 10px,
+      transparent 10px,
+      transparent 20px
+    ),
+    var(--bg);
+  color: var(--text);
+}
+
+header {
+  text-align: center;
+  padding: 32px 16px 20px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 3.6rem;
+  letter-spacing: 1px;
+}
+
+header h1 span {
+  color: var(--accent);
+}
+
+/* Pokébola (SVG) no lugar do "o" de Poké */
+.logo-bola {
+  display: inline-block;
+  width: 0.78em;
+  height: 0.78em;
+  margin: 0 0.02em;
+  vertical-align: -0.06em;
+}
+
+header p {
+  margin: 6px 0 0;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  min-height: 1.2em;
+}
+
+/* ============ Conta (login/cadastro/sair) ============ */
+.account-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 0 16px;
+  max-width: 500px;
+}
+
+.account-bar input {
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text);
+  border-radius: 20px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  outline: none;
+  min-width: 110px;
+}
+
+.account-bar input:focus {
+  border-color: var(--accent);
+}
+
+.account-bar button {
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--accent);
+  color: #14161a;
+  white-space: nowrap;
+}
+
+.account-bar button:hover {
+  opacity: 0.85;
+}
+
+.account-bar button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.signup-fields {
+  display: none;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.signup-fields.show {
+  display: flex;
+}
+
+.account-logged-in {
+  display: none;
+  gap: 8px;
+  align-items: center;
+}
+
+.account-logged-in.show {
+  display: flex;
+}
+
+.account-logged-in span {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.account-msg {
+  text-align: center;
+  color: var(--error);
+  font-size: 0.8rem;
+  margin-top: 8px;
+  display: none;
+}
+
+.account-msg.show {
+  display: block;
+}
+
+/* ============ Busca + botão de favoritos lado a lado ============ */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin: 18px auto;
+  width: 90%;
+  max-width: 460px;
+}
+
+.toolbar #search {
+  flex: 1;
+  min-width: 180px;
+  margin: 0;
+  max-width: none;
+}
+
+.fav-toggle-btn {
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--accent);
+  border-radius: 20px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.fav-toggle-btn:hover {
+  border-color: var(--accent);
+}
+
+.fav-toggle-btn.active {
+  background: var(--accent);
+  color: #14161a;
+  border-color: var(--accent);
+}
+
+#search {
+  display: block;
+  margin: 18px auto;
+  width: 90%;
+  max-width: 320px;
+  padding: 10px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+#search:focus {
+  border-color: var(--accent);
+}
+
+#status {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  min-height: 20px;
+  margin-bottom: 10px;
+}
+
+/* ============ Layout dos cards ============ */
+#grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  padding: 10px 24px 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.card {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 14px;
+  width: 150px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 0;
+}
+
+/* Borda arco-íris que aparece no hover */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 2px;
+  background: linear-gradient(45deg, red, orange, yellow, rgb(0, 255, 0), blue, rgb(255, 0, 255));
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card img {
+  width: 90px;
+  height: 90px;
+}
+
+.card .num {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+}
+
+.card .name {
+  font-weight: 600;
+  margin: 2px 0 8px;
+  text-transform: capitalize;
+}
+
+.types {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.type-badge {
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border-radius: 10px;
+  color: #14161a;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Estrela de favorito no card */
+.fav-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--text-dim);
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fav-btn:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.fav-btn.active {
+  color: var(--accent);
+}
+
+.fav-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.empty-msg {
+  width: 100%;
+  text-align: center;
+  padding: 50px 20px;
+  color: var(--text-dim);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  padding-bottom: 24px;
+}
+
+/* ============ Efeitos (cards entrando e status tremendo) ============ */
+.card.fade-in {
+  animation: pkFadeIn 0.45s ease backwards;
+}
+
+@keyframes pkFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+#status.shake {
+  animation: pkShake 0.4s ease;
+}
+
+@keyframes pkShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card.fade-in,
+  #status.shake {
+    animation: none;
+  }
+}
+
+/* ===== Animação da Pokébola + Pokédex (classes com "pk-" para não conflitar com o resto) ===== */
+#pk-overlay, #pk-overlay * { box-sizing: border-box; }
+#pk-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.75); display: none; align-items: center; justify-content: center; z-index: 1000; }
+#pk-overlay.ativo { display: flex; }
+
+/* ---------- POKÉBOLA ---------- */
+.pk-ball { position: absolute; width: 120px; height: 120px; top: 0; left: calc(50% - 60px); opacity: 0; }
+.pk-ball .pk-topo, .pk-ball .pk-base { position: absolute; left: 0; width: 120px; height: 60px; border: 6px solid #111; }
+.pk-ball .pk-topo { top: 0; background: #e53935; border-radius: 60px 60px 0 0; border-bottom: 0; transform-origin: 0 100%; transition: transform .5s ease-out; }
+.pk-ball .pk-base { bottom: 0; background: #fff; border-radius: 0 0 60px 60px; border-top: 0; }
+.pk-ball .pk-botao { position: absolute; top: 44px; left: 44px; width: 32px; height: 32px; background: #fff; border: 6px solid #111; border-radius: 50%; z-index: 2; }
+.pk-ball .pk-luz { position: absolute; inset: 20px; border-radius: 50%; background: #fff; filter: blur(14px); opacity: 0; transition: opacity .4s; }
+
+.pk-ball.pk-cair { opacity: 1; animation: pk-cair .9s cubic-bezier(.3,.7,.4,1) forwards; }
+@keyframes pk-cair {
+  0%   { transform: translateY(-60vh); }
+  60%  { transform: translateY(calc(50vh - 60px)); }
+  75%  { transform: translateY(calc(50vh - 110px)); }
+  100% { transform: translateY(calc(50vh - 60px)); }
+}
+.pk-ball.pk-tremer { opacity: 1; animation: pk-tremer .8s ease-in-out; transform: translateY(calc(50vh - 60px)); }
+@keyframes pk-tremer {
+  0%,100% { transform: translateY(calc(50vh - 60px)) rotate(0deg); }
+  20% { transform: translateY(calc(50vh - 60px)) rotate(12deg); }
+  40% { transform: translateY(calc(50vh - 60px)) rotate(-10deg); }
+  60% { transform: translateY(calc(50vh - 60px)) rotate(8deg); }
+  80% { transform: translateY(calc(50vh - 60px)) rotate(-5deg); }
+}
+.pk-ball.pk-abrir { opacity: 1; animation: none; transform: translateY(calc(50vh - 60px)) rotate(0deg); }
+.pk-ball.pk-abrir .pk-topo { transform: rotate(-40deg); }
+.pk-ball.pk-abrir .pk-luz { opacity: 1; }
+.pk-ball.pk-sumir { opacity: 0; transition: opacity .4s; }
+
+/* ---------- POKÉDEX (FICHA) ---------- */
+#pk-dex { width: min(94vw, 880px); max-height: 94vh; overflow-y: auto; background: #fff; color: #313131; border-radius: 16px; padding: 22px; text-align: left;
+          transform: scale(.2) translateY(60vh); opacity: 0; transition: transform .6s cubic-bezier(.2,1.2,.4,1), opacity .4s; }
+#pk-dex.mostrar { transform: none; opacity: 1; }
+.pk-titulo { margin: 0 0 14px; font-size: 26px; font-weight: 700; color: #313131; text-transform: capitalize; }
+.pk-titulo small { color: #919191; font-weight: 400; font-size: .6em; }
+.pk-ficha { display: grid; grid-template-columns: 1fr; gap: 20px; }
+@media (min-width: 720px) { .pk-ficha { grid-template-columns: 1fr 1fr; } }
+
+.pk-imagem { background: #f2f2f2; border-radius: 6px; padding: 14px; display: flex; justify-content: center; }
+.pk-imagem img { width: 100%; max-width: 320px; aspect-ratio: 1; object-fit: contain; }
+
+.pk-stats { background: #a3a3a3; border-radius: 10px; padding: 14px 16px 10px; margin-top: 14px; color: #212121; }
+.pk-stats-t { margin: 0 0 10px; font-size: 14px; font-weight: 500; color: #212121; }
+.pk-colunas { display: flex; gap: 6px; }
+.pk-col { flex: 1; text-align: center; }
+.pk-seg { display: flex; flex-direction: column-reverse; gap: 2px; height: 150px; }
+.pk-seg i { flex: 1; background: #fff; border-radius: 1px; }
+.pk-seg i.on { background: #30a7d7; }
+.pk-col span { display: block; font-size: 10px; font-weight: 700; margin-top: 6px; line-height: 1.1; color: #212121; }
+
+.pk-desc { margin: 0; font-size: 17px; line-height: 1.35; min-height: 70px; color: #313131; }
+.pk-versoes { display: flex; align-items: center; gap: 10px; margin: 14px 0; color: #313131; }
+.pk-vbtn { width: 30px; height: 30px; border-radius: 50%; border: 3px solid transparent; background: radial-gradient(circle, #fff 28%, var(--v) 30%); cursor: pointer; padding: 0; opacity: .55; }
+.pk-vbtn.ativo { opacity: 1; border-color: var(--v); }
+
+.pk-infos { margin: 0; background: #30a7d7; border-radius: 10px; padding: 18px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 10px; }
+.pk-infos dt { margin: 0; color: #fff; font-size: 14px; }
+.pk-infos dd { margin: 2px 0 0; font-size: 19px; color: #212121; text-transform: capitalize; }
+.pk-infos dd.pk-un { text-transform: none; } /* altura/peso: mantém "m" e "kg" minúsculos */
+.pk-secao { margin: 22px 0 0; font-size: 20px; font-weight: 500; color: #313131; }
+.pk-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.pk-badge { min-width: 138px; text-align: center; color: #212121; padding: 6px 12px; border-radius: 4px; font-size: 15px; text-transform: capitalize; background: var(--c); }
+.pk-badge.escuro { color: #fff; }
+
+#pk-fechar { margin-top: 18px; width: 100%; padding: 10px; border: 0; border-radius: 8px; background: #111; color: #fff; font-weight: 700; cursor: pointer; }
+
+@media (max-width: 560px) {
+  header h1 { font-size: 2.6rem; }
+  .toolbar #search { flex-basis: 100%; } /* busca ocupa a linha toda e o botão de favoritos vai abaixo */
+}

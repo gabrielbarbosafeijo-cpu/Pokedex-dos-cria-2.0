@@ -1,0 +1,282 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Pokede",
+    "description": "",
+    "version": "1"
+  },
+  "basePath": "/Pokedex/rest/Pokede",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/DesfavoritarPokemon": {
+      "delete": {
+        "tags": [
+          "Pokede"
+        ],
+        "description": "",
+        "operationId": "DesfavoritarPokemon",
+        "parameters": [
+          {
+            "name": "GuidPerson",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "PokemonGuid",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/FavoritarPokemon": {
+      "post": {
+        "tags": [
+          "Pokede"
+        ],
+        "description": "",
+        "operationId": "FavoritarPokemon",
+        "parameters": [
+          {
+            "name": "GuidPerson",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "PokemonGuid",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/FavoritosByGuidPerson": {
+      "get": {
+        "tags": [
+          "Pokede"
+        ],
+        "description": "",
+        "operationId": "FavoritosByGuidPerson",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "GuidPerson",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/GuidByUsername": {
+      "get": {
+        "tags": [
+          "Pokede"
+        ],
+        "description": "",
+        "operationId": "GuidByUsername",
+        "produces": [
+          "text/plain"
+        ],
+        "parameters": [
+          {
+            "name": "Username",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        }
+      }
+    },
+    "/Person": {
+      "delete": {
+        "tags": [
+          "Pokede"
+        ],
+        "description": "",
+        "operationId": "DeletePerson",
+        "parameters": [
+          {
+            "name": "Guid",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Pokede"
+        ],
+        "description": "",
+        "operationId": "Person",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "parameters": [
+          {
+            "name": "Person",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DateTextTextTextRecord"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        }
+      }
+    },
+    "/PersonByGuid": {
+      "get": {
+        "tags": [
+          "Pokede"
+        ],
+        "description": "",
+        "operationId": "PersonByGuid",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Guid",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/DateTextTextTextRecord"
+            }
+          }
+        }
+      }
+    },
+    "/PersonFirstName": {
+      "patch": {
+        "tags": [
+          "Pokede"
+        ],
+        "description": "",
+        "operationId": "PersonFirstName",
+        "parameters": [
+          {
+            "name": "Name",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "Guid",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "DateTextTextTextRecord": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string",
+          "default": ""
+        },
+        "Surename": {
+          "type": "string",
+          "default": ""
+        },
+        "Username": {
+          "type": "string",
+          "default": ""
+        },
+        "Birthday": {
+          "type": "string",
+          "format": "date",
+          "example": "2014-12-31"
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Pokede"
+    }
+  ]
+}
