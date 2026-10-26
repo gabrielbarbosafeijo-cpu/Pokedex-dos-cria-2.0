@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokédex dos Guri</title>
+<link rel="stylesheet" href="../CSS/poke.css">
+</head>
+<body>
+
+<header>
+  <h1 aria-label="Pokédex">P<svg class="logo-bola" viewBox="0 0 400 400" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M0.36 188A200 200 0 0 1 399.64 188L311.36 188A112 112 0 0 0 88.64 188Z M0.36 212A200 200 0 0 0 399.64 212L311.36 212A112 112 0 0 1 88.64 212Z M134 200a66 66 0 1 0 132 0a66 66 0 1 0-132 0Z M167 200a33 33 0 1 0 66 0a33 33 0 1 0-66 0Z"/></svg>ké<span>dex</span></h1>
+  <p id="subtitulo">Projetinho dos Guri</p>
+</header>
+
+<!-- Conta (login/cadastro via API do professor) -->
+<div class="account-bar" id="account-bar">
+  <div class="account-logged-out" id="account-logged-out">
+    <input type="text" id="username-input" placeholder="Usuário">
+    <button id="login-btn">Entrar</button>
+  </div>
+
+  <div class="signup-fields" id="signup-fields">
+    <input type="text" id="signup-name" placeholder="Nome">
+    <input type="text" id="signup-surname" placeholder="Sobrenome">
+    <input type="date" id="signup-birthday">
+    <button id="signup-btn">Criar conta</button>
+  </div>
+
+  <div class="account-logged-in" id="account-logged-in">
+    <span id="greeting-text"></span>
+    <button id="logout-btn">Sair</button>
+  </div>
+</div>
+<div id="account-msg" class="account-msg"></div>
+
+<div class="toolbar">
+  <input type="text" id="search" placeholder="Buscar Pokémon pelo nome...">
+  <button id="fav-toggle" class="fav-toggle-btn">★ Favoritos (<span id="fav-count">0</span>)</button>
+</div>
+
+<div id="status" aria-live="polite"></div>
+
+<div id="grid"></div>
+
+<footer>@GaFeGus todos os direitos reservados</footer>
+
+<!-- Animação: pokébola + ficha da pokédex (aparece ao clicar num card) -->
+<div id="pk-overlay">
+  <div class="pk-ball" id="pk-ball">
+    <div class="pk-luz"></div>
+    <div class="pk-topo"></div>
+    <div class="pk-base"></div>
+    <div class="pk-botao"></div>
+  </div>
+  <div id="pk-dex"></div>
+</div>
+
+<script src="../JS/poke.js"></script>
+</body>
+</html>
