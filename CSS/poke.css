@@ -1,3 +1,7 @@
+@font-face {
+  font-family: 'Pixelify Sans';
+  src: url('../fonts/PixelifySans-Regular.ttf') format('truetype');
+}
 :root {
   --bg: #14161a;
   --card-bg: #1e2126;
@@ -14,7 +18,7 @@
 
 body {
   margin: 0;
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: 'Pixelify Sans', 'Segoe UI', Arial, sans-serif;
   background:
     repeating-linear-gradient(
       45deg,
@@ -25,6 +29,7 @@ body {
     ),
     var(--bg);
   color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 header {
@@ -104,6 +109,22 @@ header p {
 .account-bar button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* botão secundário (Criar conta / Voltar) */
+.account-bar button.btn-secundario {
+  background: var(--card-bg);
+  color: var(--accent);
+  border: 1px solid var(--card-border);
+}
+
+.account-bar button.btn-secundario:hover {
+  border-color: var(--accent);
+  opacity: 1;
+}
+
+.account-msg.ok {
+  color: #6bd68a;
 }
 
 .signup-fields {
@@ -384,6 +405,30 @@ footer {
 .pk-ball .pk-botao { position: absolute; top: 44px; left: 44px; width: 32px; height: 32px; background: #fff; border: 6px solid #111; border-radius: 50%; z-index: 2; }
 .pk-ball .pk-luz { position: absolute; inset: 20px; border-radius: 50%; background: #fff; filter: blur(14px); opacity: 0; transition: opacity .4s; }
 
+.pk-sobe {
+  position: fixed;
+  bottom: 0;
+  width: 96px;
+  height: 96px;
+  image-rendering: pixelated;
+  pointer-events: none;
+  z-index: -1;
+  animation: pk-subir .9s cubic-bezier(.3,.7,.4,1) forwards;
+  transition: opacity .4s;
+}
+.pk-sobe.pk-sumir { opacity: 0; }
+
+/* espelho do pk-cair: mesmos 60% / 75% / 100%, direção invertida */
+@keyframes pk-subir {
+  0%   { transform: translateY(60vh); }
+  60%  { transform: translateY(calc(-1 * var(--alt))); }
+  75%  { transform: translateY(calc(-1 * var(--alt) + 50px)); }
+  100% { transform: translateY(calc(-1 * var(--alt))); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pk-sobe { display: none; }
+}
 .pk-ball.pk-cair { opacity: 1; animation: pk-cair .9s cubic-bezier(.3,.7,.4,1) forwards; }
 @keyframes pk-cair {
   0%   { transform: translateY(-60vh); }
@@ -405,42 +450,41 @@ footer {
 .pk-ball.pk-sumir { opacity: 0; transition: opacity .4s; }
 
 /* ---------- POKÉDEX (FICHA) ---------- */
-#pk-dex { width: min(94vw, 880px); max-height: 94vh; overflow-y: auto; background: #fff; color: #313131; border-radius: 16px; padding: 22px; text-align: left;
+#pk-dex { width: min(94vw, 880px); max-height: 94vh; overflow-y: auto; background:repeating-linear-gradient(45deg, rgba(119, 0, 255, 0.06) 0px, rgba(119, 0, 255, 0.06) 10px, transparent 10px, transparent 20px), #0a0a0a; color: #313131; border-radius: 16px; padding: 22px; text-align: left;
           transform: scale(.2) translateY(60vh); opacity: 0; transition: transform .6s cubic-bezier(.2,1.2,.4,1), opacity .4s; }
 #pk-dex.mostrar { transform: none; opacity: 1; }
-.pk-titulo { margin: 0 0 14px; font-size: 26px; font-weight: 700; color: #313131; text-transform: capitalize; }
+.pk-titulo { margin: 0 0 14px; font-size: 26px; font-weight: 700; color: #ffffff; text-transform: capitalize; }
 .pk-titulo small { color: #919191; font-weight: 400; font-size: .6em; }
 .pk-ficha { display: grid; grid-template-columns: 1fr; gap: 20px; }
 @media (min-width: 720px) { .pk-ficha { grid-template-columns: 1fr 1fr; } }
 
-.pk-imagem { background: #f2f2f2; border-radius: 6px; padding: 14px; display: flex; justify-content: center; }
+.pk-imagem { background: #BAB8B5; border-radius: 6px; padding: 14px; display: flex; justify-content: center; }
 .pk-imagem img { width: 100%; max-width: 320px; aspect-ratio: 1; object-fit: contain; }
 
-.pk-stats { background: #a3a3a3; border-radius: 10px; padding: 14px 16px 10px; margin-top: 14px; color: #212121; }
-.pk-stats-t { margin: 0 0 10px; font-size: 14px; font-weight: 500; color: #212121; }
+.pk-stats { background: #BAB8B5; border-radius: 10px; padding: 14px 16px 10px; margin-top: 14px; color: #212121; }
+.pk-stats-t { margin: 0 0 10px; font-size: 14px; font-weight: 500; color: #ffffff; }
 .pk-colunas { display: flex; gap: 6px; }
 .pk-col { flex: 1; text-align: center; }
 .pk-seg { display: flex; flex-direction: column-reverse; gap: 2px; height: 150px; }
 .pk-seg i { flex: 1; background: #fff; border-radius: 1px; }
-.pk-seg i.on { background: #30a7d7; }
+.pk-seg i.on { background: #BAB8B5; }
 .pk-col span { display: block; font-size: 10px; font-weight: 700; margin-top: 6px; line-height: 1.1; color: #212121; }
 
-.pk-desc { margin: 0; font-size: 17px; line-height: 1.35; min-height: 70px; color: #313131; }
-.pk-versoes { display: flex; align-items: center; gap: 10px; margin: 14px 0; color: #313131; }
+.pk-desc { margin: 0; font-size: 17px; line-height: 1.35; min-height: 70px; color: #ffffff; }
+.pk-versoes { display: flex; align-items: center; gap: 10px; margin: 14px 0; color: #ffffff; }
 .pk-vbtn { width: 30px; height: 30px; border-radius: 50%; border: 3px solid transparent; background: radial-gradient(circle, #fff 28%, var(--v) 30%); cursor: pointer; padding: 0; opacity: .55; }
 .pk-vbtn.ativo { opacity: 1; border-color: var(--v); }
 
-.pk-infos { margin: 0; background: #30a7d7; border-radius: 10px; padding: 18px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 10px; }
+.pk-infos { margin: 0; background: #BAB8B5; border-radius: 10px; padding: 18px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 10px; }
 .pk-infos dt { margin: 0; color: #fff; font-size: 14px; }
 .pk-infos dd { margin: 2px 0 0; font-size: 19px; color: #212121; text-transform: capitalize; }
 .pk-infos dd.pk-un { text-transform: none; } /* altura/peso: mantém "m" e "kg" minúsculos */
-.pk-secao { margin: 22px 0 0; font-size: 20px; font-weight: 500; color: #313131; }
+.pk-secao { margin: 22px 0 0; font-size: 20px; font-weight: 500; color: #ffffff; }
 .pk-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .pk-badge { min-width: 138px; text-align: center; color: #212121; padding: 6px 12px; border-radius: 4px; font-size: 15px; text-transform: capitalize; background: var(--c); }
 .pk-badge.escuro { color: #fff; }
 
 #pk-fechar { margin-top: 18px; width: 100%; padding: 10px; border: 0; border-radius: 8px; background: #111; color: #fff; font-weight: 700; cursor: pointer; }
-
 @media (max-width: 560px) {
   header h1 { font-size: 2.6rem; }
   .toolbar #search { flex-basis: 100%; } /* busca ocupa a linha toda e o botão de favoritos vai abaixo */
