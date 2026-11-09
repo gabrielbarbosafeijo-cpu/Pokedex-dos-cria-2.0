@@ -265,12 +265,17 @@ function mostrarMensagemConta(texto, ok) {
 
 async function apiGuidPorUsername(username) {
   const res = await fetch(apiBase + "/GuidByUsername?Username=" + encodeURIComponent(username));
-  if (!res.ok) return null;
+  if (res.status === 404) return null;                       // usuário não existe
+  if (!res.ok) throw new Error("API de contas respondeu " + res.status); // erro de verdade: não confundir com "não existe"
   const texto = (await res.text()).trim().replace(/^"|"$/g, "");
   if (!texto || /^0{8}-0{4}-0{4}-0{4}-0{12}$/.test(texto)) return null; // vazio ou guid "nulo" = usuário não existe
   return texto;
 }
 
+// CORS: este POST manda "Content-Type: application/json", então o navegador envia antes um OPTIONS (preflight)
+// perguntando à API se pode. Se o servidor não liberar o OPTIONS, o POST nem chega a ser enviado e o fetch cai no
+// catch com "Failed to fetch". Quem libera é a API (Access-Control-Allow-Origin/Headers/Methods), não o front.
+// Os GETs simples (sem cabeçalhos extras) não têm preflight.
 async function apiCriarPessoa(dados) {
   const res = await fetch(apiBase + "/Person", {
     method: "POST",
@@ -295,7 +300,7 @@ async function apiPessoaPorGuid(guid) {
 
 async function apiFavoritosDoServidor(guid) {
   const res = await fetch(apiBase + "/FavoritosByGuidPerson?GuidPerson=" + encodeURIComponent(guid));
-  if (!res.ok) return [];
+  if (!res.ok) throw new Error("Falha ao buscar favoritos");
   return res.json();
 }
 
