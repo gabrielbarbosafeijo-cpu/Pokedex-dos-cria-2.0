@@ -1,6 +1,22 @@
 # Pokédex dos Guri 2.0
 
-Projeto de faculdade (ADS – Uniguaçu) feito em HTML, CSS e JavaScript puro.
+Pokédex da Geração 1 (151 Pokémon) com busca, ficha animada com estatísticas, cadastro/login e favoritos por usuário.
+Projeto bimestral de faculdade (ADS – Uniguaçu).
+
+## Tecnologias
+
+HTML, CSS e JavaScript puro (fetch), PokeAPI e API REST do professor (OutSystems). Sem backend próprio e sem build.
+
+## Como executar
+
+- **Online:** <https://gabrielbarbosafeijo-cpu.github.io/Pokedex-dos-cria-2.0/> (GitHub Pages).
+- **Local:** abra a pasta no VS Code e use a extensão **Live Server** em `index.html`.
+  Não abra o arquivo direto (`file://`): a origem vira `null` e o navegador bloqueia as requisições por CORS.
+
+## Integrantes
+
+- Gabriel Barbosa Feijó ([@gabrielbarbosafeijo-cpu](https://github.com/gabrielbarbosafeijo-cpu))
+- _(adicionar os demais integrantes do grupo)_
 
 ## Estrutura
 
@@ -43,3 +59,11 @@ Sem o arquivo o site funciona normalmente com a fonte padrão (Segoe UI/Arial).
 Botão **Criar conta** na barra de conta (ou tentar entrar com um usuário que não existe) abre o formulário:
 usuário, nome, sobrenome e data de nascimento. Antes de criar, o site confere se o usuário já existe
 (`GET /GuidByUsername`) e só então faz `POST /Person`.
+
+## CORS e tratamento de erros
+
+- Todo `fetch` está em `try/catch` e mostra mensagem ao usuário (erro da PokeAPI, da API de contas ou de favoritos).
+- A PokeAPI libera CORS (`Access-Control-Allow-Origin: *`). A API do professor precisa liberar a origem do site
+  (GitHub Pages ou Live Server). Se não liberar, o login/cadastro mostra "Verifique conexão/CORS" e não há ajuste no front que resolva.
+- `POST /Person` usa JSON, então o navegador faz um preflight `OPTIONS` antes (explicado em comentário no `JS/poke.js`).
+- Não há senhas, chaves ou tokens no repositório; `.gitignore` já ignora `.env`.
